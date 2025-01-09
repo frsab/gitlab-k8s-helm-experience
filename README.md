@@ -10,5 +10,12 @@
     - runnerRegistrationToken: "L3cKXUo4U_iuV7pnEev8"
     - serviceAccount.name
     - runners.config (clone_url)
+ ### Fichier des configurations ServiceAccount, Role et Rolebindings 
+ - [configurations des ServiceAccount, Role et Rolebindings](ServiceAccountConfig/gitlab-runner-rbac.yaml) 
+ - [configurations des ServiceAccount, Role et Rolebindings (version avec des commentaires)](ServiceAccountConfig/gitlab-runner-rbacCommented.yaml) 
+ - [configuration de Role ](ServiceAccountConfig/gitlab-runner-role.yaml) 
+ - [configuration de Rolebindings](ServiceAccountConfig/gitlab-runner-rolebinding.yaml) 
+ - [configuration de ServiceAccount](ServiceAccountConfig/gitlab-runner-serviceaccount.yaml)
+
 
 

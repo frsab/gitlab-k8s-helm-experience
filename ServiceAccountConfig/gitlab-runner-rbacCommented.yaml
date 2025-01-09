@@ -1,0 +1,49 @@
+# Définition du ServiceAccount dans le namespace gitlab-runner
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gitlab-runner
+  namespace: gitlab-runner
+---
+# Définition du rôle (Role) dans le namespace gitlab-runner
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: gitlab-runner  # Nom du namespace dans lequel GitLab Runner est déployé
+  name: gitlab-runner-role  # Nom du rôle que nous définissons
+rules:
+  # Cette section définit les règles d'accès pour le rôle
+  - apiGroups: [""]
+    # apiGroups: "" fait référence à l'API de base de Kubernetes (pas une API personnalisée)
+    resources:               # Liste des ressources que ce rôle peut gérer
+      - pods                 # Permet d'interagir avec les pods
+      - pods/exec            # Permet d'exécuter des commandes dans les pods
+      - pods/log             # Permet de lire les logs des pods
+      - services             # Permet de gérer les services
+      - configmaps           # Permet de gérer les ConfigMaps
+      - secrets              # Permet de gérer les Secrets
+      - persistentvolumeclaims # Permet de gérer les PVC (Claims de volumes persistants)
+    verbs:                   # Liste des actions autorisées pour chaque ressource
+      - get                   # Permet de lire les ressources
+      - list                  # Permet de lister les ressources
+      - create                # Permet de créer des ressources
+      - delete                # Permet de supprimer des ressources
+      - update                # Permet de mettre à jour des ressources
+
+---
+# Définition de lier ce rôle à un service account spécifique
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: gitlab-runner-role-binding  # Nom de l'association entre le rôle et le service account
+  namespace: gitlab-runner          # Namespace où ce binding sera appliqué
+subjects:
+  # Liste des sujets (utilisateurs, groupes ou service accounts) auxquels ce rôle sera appliqué
+  - kind: ServiceAccount            # Le type de sujet ici est un service account
+    name: gitlab-runner             # Nom du service account que GitLab Runner utilisera
+    namespace: gitlab-runner        # Namespace où ce service account existe
+roleRef:
+  # Cette section indique quel rôle (Role) est attribué au service account
+  kind: Role                        # Nous faisons référence à un "Role", pas un "ClusterRole"
+  name: gitlab-runner-role          # Nom du rôle que nous avons défini précédemment
+  apiGroup: rbac.authorization.k8s.io  # Le groupe API pour les rôles RBAC
