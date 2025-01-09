@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-debug
+  namespace: gitlab-runner
+spec:
+  serviceAccountName: gitlab-runner
+  containers:
+  - name: alpine
+    image: alpine
+    command: [ "sh" ]
+    tty: true
+    stdin: true
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
